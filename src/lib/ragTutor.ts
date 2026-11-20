@@ -24,6 +24,9 @@ export interface PedagogyMeta {
   bloomLevel?: string;
   scaffoldingTactic?: string;
   targetDiscovery?: string;
+  cognitiveLoadState?: "Low (Fatigue)" | "Optimal (Active)" | "High (Flow State)";
+  focusScore?: number;
+  thinkingProcess?: string[];
 }
 
 export type TextSegment = { type: "text"; text: string } | { type: "cite"; n: number };
@@ -59,6 +62,8 @@ interface AskOptions {
   chapterId?: string;
   sectionIndex?: number;
   scope: TutorScope;
+  focusScore?: number;
+  attentionStatus?: string;
   signal?: AbortSignal;
   onSources: (sources: TutorSource[]) => void;
   onDelta: (text: string) => void;
@@ -85,6 +90,8 @@ export async function askTutor(options: AskOptions) {
       chapterId: options.chapterId,
       sectionIndex: options.sectionIndex,
       scope: options.scope,
+      focusScore: options.focusScore,
+      attentionStatus: options.attentionStatus,
     }),
   });
 

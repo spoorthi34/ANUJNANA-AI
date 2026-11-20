@@ -295,6 +295,7 @@ export default function Learn() {
         chapterId={chapter.id}
         sectionIndex={page}
         sectionTitle={`${chapter.chapterNumber}.${page + 1} ${section.title}`}
+        focusMetrics={tracker.metrics}
       />
       <QuizModal
         isOpen={showQuiz}

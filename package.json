@@ -1,7 +1,9 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "anujnana-socratic-compass",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
+  "description": "AnuJnana — Multi-Agent Socratic Learning Platform with Biometric Attention & Cognitive Scaffolding",
+  "author": "Spoorthi K P",
   "type": "module",
   "scripts": {
     "dev": "vite",

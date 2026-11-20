@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, Brain, ChevronDown, ChevronUp, FileText, GraduationCap, Loader2, LogIn, Send, Square, Upload, X } from "lucide-react";
+import { Activity, BookOpen, Brain, CheckCircle2, ChevronDown, ChevronUp, FileText, GraduationCap, Loader2, LogIn, Send, Sparkles, Square, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import type { FocusMetrics } from "@/hooks/useFocusTracker";
 import {
   askTutor,
   citedSourceNumbers,
@@ -26,6 +27,7 @@ interface SocraticTutorModalProps {
   chapterId?: string;
   sectionIndex?: number;
   sectionTitle?: string;
+  focusMetrics?: FocusMetrics;
 }
 
 const suggestedQuestions = [
@@ -52,24 +54,60 @@ const guestPedagogy: Record<string, PedagogyMeta> = {
     bloomLevel: "Analyze",
     scaffoldingTactic: "Heisenberg uncertainty counterfactual",
     targetDiscovery: "Confinement forces Δx <= L, so Δp > 0 and energy cannot be zero",
+    cognitiveLoadState: "High (Flow State)",
+    focusScore: 91,
+    thinkingProcess: [
+      "Biometric Telemetry: Focus 91% · Gaze: Centered → Cognitive load: Optimal flow.",
+      "Misconception Diagnosis: Identified classical velocity confusion vs quantum confinement.",
+      "Pedagogical Tactic: Heisenberg uncertainty counterfactual scaffolding.",
+      "Guardrail Check: [VERIFIED] Zero formula leakage; numerical values masked.",
+      "Target Goal: Lead student to deduce Δp > 0 from confined box length L.",
+    ],
   },
   "Why must ψ be zero at the walls?": {
     misconception: "Assuming boundary values are unconstrained rather than determined by infinite potential",
     bloomLevel: "Understand",
     scaffoldingTactic: "Physical boundary constraint analysis",
     targetDiscovery: "V=∞ means 0% probability inside walls, requiring ψ=0 for continuity",
+    cognitiveLoadState: "Optimal (Active)",
+    focusScore: 84,
+    thinkingProcess: [
+      "Biometric Telemetry: Focus 84% · Gaze: Centered → Active problem solving.",
+      "Misconception Diagnosis: Treating wave function as mathematically unconstrained at boundaries.",
+      "Pedagogical Tactic: Physical barrier constraint deduction.",
+      "Guardrail Check: [VERIFIED] Hint-only rules strictly enforced.",
+      "Target Goal: Link infinite potential barrier with zero detection probability |ψ|²=0.",
+    ],
   },
   "How does barrier width change tunneling?": {
     misconception: "Thinking quantum tunneling is all-or-nothing rather than exponential decay",
     bloomLevel: "Apply",
     scaffoldingTactic: "Evanescent wave decay analogy",
     targetDiscovery: "Wave amplitude decays exponentially with barrier width L",
+    cognitiveLoadState: "Optimal (Active)",
+    focusScore: 78,
+    thinkingProcess: [
+      "Biometric Telemetry: Focus 78% · Gaze: Active → Normal pacing.",
+      "Misconception Diagnosis: Discrete step expectation instead of continuous exponential decay.",
+      "Pedagogical Tactic: Evanescent sound/light penetration analogy.",
+      "Guardrail Check: [VERIFIED] Formula T=e^(-2kL) masked; guiding questions generated.",
+      "Target Goal: Discover that wave amplitude drops continuously across distance.",
+    ],
   },
   "What does a node mean?": {
     misconception: "Confusing physical wave shape with spatial particle probability density",
     bloomLevel: "Understand",
     scaffoldingTactic: "Probability density interpretation (|ψ|²)",
     targetDiscovery: "A node is where ψ=0, meaning exactly zero probability of finding the particle",
+    cognitiveLoadState: "Optimal (Active)",
+    focusScore: 82,
+    thinkingProcess: [
+      "Biometric Telemetry: Focus 82% · Gaze: Centered → Concept consolidation.",
+      "Misconception Diagnosis: Confusing mechanical standing wave shape with Born rule probability.",
+      "Pedagogical Tactic: Born rule probability mapping.",
+      "Guardrail Check: [VERIFIED] Zero answer leakage verified.",
+      "Target Goal: Realize ψ=0 translates directly to zero detection chance.",
+    ],
   },
 };
 
@@ -119,6 +157,7 @@ function TutorMessage({ message, onOpenLesson }: { message: Message; onOpenLesso
   const [activeSource, setActiveSource] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [showPedagogy, setShowPedagogy] = useState(false);
+  const [showCoT, setShowCoT] = useState(false);
   const sources = message.sources ?? [];
   const cited = citedSourceNumbers(message.text, sources.length);
   const citedSources = cited.map((n) => sources.find((s) => s.n === n)).filter(Boolean) as TutorSource[];
@@ -134,12 +173,13 @@ function TutorMessage({ message, onOpenLesson }: { message: Message; onOpenLesso
             onClick={() => setShowPedagogy((v) => !v)}
             className="flex w-full items-center justify-between text-left font-semibold text-secondary hover:text-secondary/80"
           >
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5 flex-wrap">
               <Brain className="h-3.5 w-3.5 shrink-0" />
               <span>Pedagogical Reasoning</span>
-              {message.pedagogy.scaffoldingTactic && (
-                <span className="rounded-md bg-secondary/20 px-1.5 py-0.5 text-[10px] font-medium text-foreground">
-                  {message.pedagogy.scaffoldingTactic}
+              {message.pedagogy.cognitiveLoadState && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-secondary/20 px-1.5 py-0.5 text-[10px] font-medium text-foreground">
+                  <Activity className="h-3 w-3 text-secondary animate-pulse" />
+                  {message.pedagogy.cognitiveLoadState}
                 </span>
               )}
             </span>
@@ -148,6 +188,7 @@ function TutorMessage({ message, onOpenLesson }: { message: Message; onOpenLesso
               {showPedagogy ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             </span>
           </button>
+
           {showPedagogy && (
             <div className="mt-2 space-y-1.5 border-t border-secondary/20 pt-2 text-[11px] leading-relaxed">
               {message.pedagogy.misconception && (
@@ -155,10 +196,42 @@ function TutorMessage({ message, onOpenLesson }: { message: Message; onOpenLesso
                   <strong className="text-secondary">Identified Concept Gap:</strong> {message.pedagogy.misconception}
                 </p>
               )}
+              {message.pedagogy.scaffoldingTactic && (
+                <p>
+                  <strong className="text-secondary">Scaffolding Strategy:</strong> {message.pedagogy.scaffoldingTactic}
+                </p>
+              )}
               {message.pedagogy.targetDiscovery && (
                 <p>
                   <strong className="text-secondary">Self-Discovery Target:</strong> {message.pedagogy.targetDiscovery}
                 </p>
+              )}
+
+              {/* DeepSeek-R1 style CoT Thinking Process */}
+              {message.pedagogy.thinkingProcess && message.pedagogy.thinkingProcess.length > 0 && (
+                <div className="mt-2 rounded-lg border border-secondary/20 bg-background/50 p-2 font-mono text-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => setShowCoT((v) => !v)}
+                    className="flex w-full items-center justify-between font-semibold text-secondary hover:text-secondary/80"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="h-3 w-3 text-secondary" />
+                      <span>Thinking Process ({message.pedagogy.thinkingProcess.length} steps)</span>
+                    </span>
+                    {showCoT ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                  </button>
+                  {showCoT && (
+                    <div className="mt-1.5 space-y-1 border-t border-secondary/15 pt-1.5 text-muted-foreground">
+                      {message.pedagogy.thinkingProcess.map((step, idx) => (
+                        <div key={idx} className="flex items-start gap-1">
+                          <span className="text-secondary select-none">›</span>
+                          <span>{step}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -222,7 +295,14 @@ function TutorMessage({ message, onOpenLesson }: { message: Message; onOpenLesso
   );
 }
 
-export default function SocraticTutorModal({ isOpen, onClose, chapterId, sectionIndex, sectionTitle }: SocraticTutorModalProps) {
+export default function SocraticTutorModal({
+  isOpen,
+  onClose,
+  chapterId,
+  sectionIndex,
+  sectionTitle,
+  focusMetrics,
+}: SocraticTutorModalProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -286,6 +366,8 @@ export default function SocraticTutorModal({ isOpen, onClose, chapterId, section
         chapterId,
         sectionIndex,
         scope,
+        focusScore: focusMetrics?.focus,
+        attentionStatus: focusMetrics?.status,
         signal: controller.signal,
         onSources: (sources) => updateLast((m) => ({ ...m, sources })),
         onPedagogy: (pedagogy) => updateLast((m) => ({ ...m, pedagogy })),

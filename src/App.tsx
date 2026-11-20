@@ -44,6 +44,7 @@ const App = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/oauth/consent" element={<OAuthConsent />} />
           <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
           <Route path="/topics" element={<Topics />} />
           <Route path="/learn" element={<Learn />} />
