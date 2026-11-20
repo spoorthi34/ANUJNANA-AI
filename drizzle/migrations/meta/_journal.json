@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794539665775,
+      "tag": "0000_learner_profiles_and_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794800710153,
+      "tag": "0001_create_learner_knowledge_base",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794881074336,
+      "tag": "0002_create_learning_activities",
+      "breakpoints": true
+    }
+  ]
+}
