@@ -1,4 +1,4 @@
-import { Volume2, Video, HelpCircle, Gamepad2, CheckCircle2, BookOpen, Undo2 } from "lucide-react";
+import { Volume2, Video, Brain, Gamepad2, CheckCircle2, BookOpen, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface BottomActionBarProps {
@@ -29,14 +29,14 @@ export default function BottomActionBar({
         { icon: Volume2, label: "Listen to Story", onClick: onAudioSummary },
         { icon: Video, label: "Watch Animation", onClick: onWatchVideo },
         { icon: BookOpen, label: "Fun Quiz", onClick: onTakeQuiz },
-        { icon: HelpCircle, label: "Ask Doubt", onClick: onAskDoubt },
+        { icon: Brain, label: "AI Socratic Tutor", onClick: onAskDoubt },
         { icon: Gamepad2, label: "Play Game", onClick: onPlayGame },
       ]
     : [
         { icon: Volume2, label: "Audio Summary", onClick: onAudioSummary },
         { icon: Video, label: "Watch Video", onClick: onWatchVideo },
         { icon: BookOpen, label: "Take Quiz", onClick: onTakeQuiz },
-        { icon: HelpCircle, label: "Ask Doubt", onClick: onAskDoubt },
+        { icon: Brain, label: "AI Socratic Tutor", onClick: onAskDoubt },
         { icon: Gamepad2, label: "Play Game", onClick: onPlayGame },
       ];
 

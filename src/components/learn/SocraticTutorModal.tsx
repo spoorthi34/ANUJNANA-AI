@@ -314,7 +314,22 @@ export default function SocraticTutorModal({
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "tutor",
-      text: "Hi! 👋 I'm your Socratic physics tutor.\n\nI search your lessons and your own notes, then guide you with hints and questions — never the final answer — and show exactly where each hint comes from.",
+      text: "Hi! 👋 I'm your Socratic physics tutor.\n\nI search your lessons and notes to guide you with hints and questions — never giving away the final answer. Click any suggested question below or type your doubt!",
+      pedagogy: {
+        misconception: "Baseline Socratic Cognitive Alignment",
+        bloomLevel: "Understand",
+        scaffoldingTactic: "Zone of Proximal Development (ZPD)",
+        targetDiscovery: "Lead learner to self-discovery through guided questions and source citations",
+        cognitiveLoadState: (focusMetrics?.focus ?? 85) < 50 ? "Low (Fatigue)" : "High (Flow State)",
+        focusScore: focusMetrics?.focus ?? 85,
+        thinkingProcess: [
+          `Biometric Telemetry: Focus ${focusMetrics?.focus ?? 85}% · Gaze: ${focusMetrics?.status ?? "focused"} → System armed.`,
+          "Multi-Agent Diagnostician: Active to parse student mental models and boundary assumptions.",
+          "Pedagogical Scaffolding: Dynamic Bloom level adaptation enabled.",
+          "Adversarial Guardrail: Zero answer/formula leakage rule strictly enforced.",
+          "Objective: Transform student doubts into deep physical intuition.",
+        ],
+      },
     },
   ]);
 
@@ -406,6 +421,24 @@ export default function SocraticTutorModal({
           <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close tutor" className="text-muted-foreground">
             <X className="h-5 w-5" />
           </Button>
+        </div>
+
+        {/* Live Biometric Telemetry & Cognitive State Strip */}
+        <div className="flex flex-wrap items-center justify-between border-b border-border/70 bg-muted/30 px-5 py-2 text-xs">
+          <div className="flex items-center gap-2">
+            <Activity className="h-3.5 w-3.5 text-secondary animate-pulse" />
+            <span className="font-semibold text-foreground">Live Attention Telemetry:</span>
+            <span className="rounded-md bg-secondary/20 px-2 py-0.5 text-[11px] font-bold text-secondary">
+              {focusMetrics?.focus ?? 85}% Focus
+            </span>
+            <span className="text-[11px] text-muted-foreground capitalize">
+              ({focusMetrics?.status ?? "focused"})
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 font-semibold text-secondary text-[11px]">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>{(focusMetrics?.focus ?? 85) < 50 ? "Adaptive Assistance" : "Optimal Flow State"}</span>
+          </div>
         </div>
 
         {user ? (

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { ArrowLeft, BookOpen, Box, Heart, Home, LogIn, LogOut, Menu, Sparkles, Sun } from "lucide-react";
+import { ArrowLeft, BookOpen, Box, Brain, Heart, Home, LogIn, LogOut, Menu, Sparkles, Sun } from "lucide-react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import WaveVisualization from "@/components/learn/WaveVisualization";
 import { Button } from "@/components/ui/button";
@@ -305,6 +305,20 @@ export default function Learn() {
         questions={chapter.quizQuestions}
       />
       <WaveGameModal isOpen={showGame} onClose={() => setShowGame(false)} />
+
+      {/* Floating Quick-Access AI Socratic Tutor Pill */}
+      <button
+        type="button"
+        onClick={() => setShowTutor(true)}
+        aria-label="Open AI Socratic Tutor"
+        className="fixed bottom-24 right-6 z-40 flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary px-4 py-2.5 font-bold text-secondary-foreground shadow-2xl backdrop-blur transition-all hover:scale-105 hover:bg-secondary/90"
+      >
+        <Brain className="h-5 w-5 animate-pulse text-secondary-foreground" />
+        <span className="text-sm">AI Socratic Tutor</span>
+        <span className="rounded-full bg-secondary-foreground/20 px-2 py-0.5 text-xs font-semibold">
+          {tracker.metrics.focus > 0 ? `${tracker.metrics.focus}% Focus` : "Active"}
+        </span>
+      </button>
     </div>
   );
 }
