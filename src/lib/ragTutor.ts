@@ -76,13 +76,16 @@ export async function askTutor(options: AskOptions) {
   const token = data.session?.access_token;
   if (!token) throw new Error("Please log in to use the AI tutor.");
 
-  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rag-tutor`, {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://c--ce1f6a5d-dd57-496d-8724-99d23becf346-prod.lovable.cloud";
+  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_s7ULvT-h1TxjC_yVODvslQ_Wy9uqXlu";
+
+  const response = await fetch(`${supabaseUrl}/functions/v1/rag-tutor`, {
     method: "POST",
     signal: options.signal,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      apikey: supabaseKey,
     },
     body: JSON.stringify({
       question: options.question,

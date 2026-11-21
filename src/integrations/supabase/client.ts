@@ -3,11 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { brokeredPreviewStorage } from './previewAuthStorage';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://c--ce1f6a5d-dd57-496d-8724-99d23becf346-prod.lovable.cloud";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_s7ULvT-h1TxjC_yVODvslQ_Wy9uqXlu";
 
-
-function isNewSupabaseApiKey(value: string): boolean {
+function isNewSupabaseApiKey(value?: string): boolean {
+  if (!value) return false;
   return value.startsWith('sb_publishable_') || value.startsWith('sb_secret_');
 }
 
