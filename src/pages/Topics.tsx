@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Atom, BookOpen, Box, ChevronRight, GraduationCap, Menu, Sparkles, Star, Waves, Zap } from "lucide-react";
+import { Atom, BookOpen, Box, Brain, ChevronRight, GraduationCap, Menu, Sparkles, Star, Waves, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SocraticTutorModal from "@/components/learn/SocraticTutorModal";
 
 const topics = [
   { id: "infinite-potential-well", title: "Infinite Potential Well", tagline: "Particles trapped in perfect quantum boxes", icon: Box, tone: "course-infinite" },
@@ -24,6 +26,8 @@ function CourseNavigation() {
 }
 
 export default function Topics() {
+  const [showTutor, setShowTutor] = useState(false);
+
   return <div className="course-page min-h-screen">
     <aside className="course-sidebar hidden md:flex"><CourseNavigation /></aside>
     <div className="flex items-center justify-between p-5 md:hidden">
@@ -47,10 +51,66 @@ export default function Topics() {
             <span className="relative mt-auto flex items-center gap-2 pt-5 font-display text-sm">Start Learning <ChevronRight className="h-4 w-4" /></span>
           </Link>)}
         </div>
-        <div className="course-stats mx-auto grid max-w-lg grid-cols-3 gap-4">
+
+        {/* AI Socratic Feature Showcase Banner */}
+        <div className="mt-8 rounded-2xl border border-secondary/30 bg-secondary/10 p-6 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary/20 px-3 py-1 text-xs font-bold text-secondary mb-2">
+                <Brain className="h-4 w-4" />
+                <span>v2.0 Multi-Agent Cognitive Scaffolding</span>
+              </div>
+              <h3 className="font-display text-xl font-bold text-foreground">AI Socratic Physics Tutor</h3>
+              <p className="mt-1 text-sm text-muted-foreground max-w-xl">
+                Powered by real-time cognitive misconception profiling, biometric attention adaptation, and DeepSeek-R1 style reasoning. Never gives away answers — guides you to discover them.
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowTutor(true)}
+              className="shrink-0 gap-2 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold px-5 py-2.5 shadow-md"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>Ask AI Socratic Tutor</span>
+            </Button>
+          </div>
+
+          {/* 3 Live Feature Highlights */}
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-secondary/20 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold">1</span>
+              <span><strong>Multi-Agent Scaffolding:</strong> Diagnoses misconceptions</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold">2</span>
+              <span><strong>Biometric Feedback:</strong> Focus & cognitive load adaptive</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary/20 text-secondary font-bold">3</span>
+              <span><strong>Thinking Process:</strong> DeepSeek-R1 style CoT steps</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="course-stats mx-auto mt-8 grid max-w-lg grid-cols-3 gap-4">
           {[{ icon: BookOpen, value: "3", label: "Chapters" }, { icon: Star, value: "12", label: "Subtopics" }, { icon: Sparkles, value: "100%", label: "Interactive" }].map(stat => <div key={stat.label} className="flex items-start justify-center gap-2"><stat.icon className="mt-1 h-5 w-5 text-muted-foreground" /><div><strong className="font-display text-xl">{stat.value}</strong><p className="text-[11px] text-muted-foreground">{stat.label}</p></div></div>)}
         </div>
       </div>
     </main>
+
+    {/* Floating Quick-Access AI Socratic Tutor Pill */}
+    <button
+      type="button"
+      onClick={() => setShowTutor(true)}
+      aria-label="Open AI Socratic Tutor"
+      className="fixed bottom-8 right-6 z-40 flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary px-4 py-2.5 font-bold text-secondary-foreground shadow-2xl backdrop-blur transition-all hover:scale-105 hover:bg-secondary/90"
+    >
+      <Brain className="h-5 w-5 animate-pulse text-secondary-foreground" />
+      <span className="text-sm">AI Socratic Tutor</span>
+    </button>
+
+    <SocraticTutorModal
+      isOpen={showTutor}
+      onClose={() => setShowTutor(false)}
+    />
   </div>;
 }
