@@ -316,7 +316,7 @@ export default function Learn() {
         <Brain className="h-5 w-5 animate-pulse text-secondary-foreground" />
         <span className="text-sm">AI Socratic Tutor</span>
         <span className="rounded-full bg-secondary-foreground/20 px-2 py-0.5 text-xs font-semibold">
-          {tracker.metrics.focus > 0 ? `${tracker.metrics.focus}% Focus` : "Active"}
+          {tracker.metrics && tracker.metrics.focus > 0 ? `${tracker.metrics.focus}% Focus` : "Active"}
         </span>
       </button>
     </div>
